@@ -8,7 +8,6 @@ module.exports = {
       "freight.cargo.site",
       "cloud.headwayapp.co",
       "s3-us-west-2.amazonaws.com",
-      "linknestt-by-amit.vercel.app",
     ],
   },
 };

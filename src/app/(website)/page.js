@@ -7,7 +7,6 @@ import Link from "next/link";
 import ImageGrid from "@/components/ImageGrid";
 import Banner from "@/components/Comp/Banner";
 import Gallery from "@/components/Comp/Gallery";
-// import MoveCard from "@/components/Comp/MoveCard";
 import Frequent from "@/components/Comp/Frequent";
 import Final from "@/components/Comp/Final";
 
@@ -21,8 +20,10 @@ const imageUrls = [
   "/assets/cat.png",
   "/assets/model1.png",
 ];
+
 export default async function Home() {
   const session = await getServerSession(authOptions);
+
   return (
     <main>
       <section className="pt-32 flex flex-wrap md:flex-nowrap justify-center items-center">
@@ -35,17 +36,10 @@ export default async function Home() {
           <HeroForm user={session?.user} />
         </div>
         <Carousel images={imageUrls} />
-
-        {/* <Image
-          src={'/assets/preview.png'}
-          alt="banner image"
-          width={290} // Adjust the width as needed
-          height={290} // Adjust the height to maintain the aspect ratio
-          className="rounded-2xl border-2 shadow-gray-500/20 shadow-lg hover:shadow-2xl transition-shadow"
-        /> */}
       </section>
+
       <div className="mt-20 text-center max-w-5xl">
-        <h1 className=" mb-5 text-5xl font-bold">
+        <h1 className="mb-5 text-5xl font-bold">
           You never have to change the link in your bio again
         </h1>
         <p>
@@ -56,9 +50,11 @@ export default async function Home() {
           portfolios, etc.) through one short, simple URL.
         </p>
       </div>
+
       <GridContainer />
+
       <div className="mt-20 text-center max-w-5xl">
-        <h1 className=" mb-5 text-5xl font-bold">
+        <h1 className="mb-5 text-5xl font-bold">
           Turn your Link In Bio into your own mini-website
         </h1>
         <p>
@@ -67,6 +63,7 @@ export default async function Home() {
           or purchase and support you with just one simple link.
         </p>
       </div>
+
       <div className="mt-8 flex justify-center">
         <Link
           href="/account"
@@ -75,10 +72,10 @@ export default async function Home() {
           Start now
         </Link>
       </div>
-      <ImageGrid images={imageUrls} /> {/* Add the ImageGrid component */}
+
+      <ImageGrid images={imageUrls} />
       <Banner />
       <Gallery />
-      {/* <MoveCard /> */}
       <Frequent />
       <Final />
     </main>

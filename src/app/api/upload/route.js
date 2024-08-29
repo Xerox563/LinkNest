@@ -1,41 +1,56 @@
-import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import uniqid from "uniqid";
 
+// Initialize Firebase with your project's config
+const firebaseConfig = {
+  apiKey: "AIzaSyBp4N2lKWk8PeFY0nssikHjSol3p4IdTOk",
+  authDomain: "linktree-a007a.firebaseapp.com",
+  projectId: "linktree-a007a",
+  storageBucket: "linktree-a007a.appspot.com",
+  messagingSenderId: "944162315140",
+  appId: "1:944162315140:web:28f5edc1d7a32a63eddbd1",
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
 export async function POST(req) {
-  const formData = await req.formData();
+  try {
+    const formData = await req.formData();
 
-  if (formData.has('file')) {
-    const file = formData.get('file');
+    if (formData.has("file")) {
+      const file = formData.get("file");
 
-    const s3Client = new S3Client({
-      region: 'us-east-2',
-      credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY,
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-      },
-    });
+      if (!(file instanceof Blob)) {
+        throw new Error("Invalid file");
+      }
 
-    const randomId = uniqid();
-    const ext = file.name.split('.').pop();
-    const newFilename = randomId + '.' + ext;
-    const bucketName = process.env.BUCKET_NAME;
+      const randomId = uniqid();
+      const ext = file.name.split(".").pop();
+      const newFilename = `${randomId}.${ext}`;
+      const storageRef = ref(storage, newFilename);
 
-    const chunks = [];
-    for await (const chunk of file.stream()) {
-      chunks.push(chunk);
+      // Upload the file
+      await uploadBytes(storageRef, file);
+
+      // Get the download URL
+      const downloadURL = await getDownloadURL(storageRef);
+
+      return new Response(JSON.stringify({ downloadURL }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    } else {
+      return new Response(JSON.stringify({ error: "No file provided" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
-
-    await s3Client.send(new PutObjectCommand({
-      Bucket: bucketName,
-      Key: newFilename,
-      ACL: 'public-read',
-      Body: Buffer.concat(chunks),
-      ContentType: file.type,
-    }));
-
-    const link = `https://${bucketName}.s3.amazonaws.com/${newFilename}`;
-
-    return Response.json(link);
-
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
