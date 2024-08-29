@@ -5,7 +5,7 @@
 
   <img src="./public/banner.png" alt="preview" />
 
-<a href="https://jj-linktri.vercel.app/">Demo</a>
+<a href="https://linknestt-by-amit.vercel.app/">Demo</a>
 
 </div>
 
@@ -18,9 +18,6 @@ This project is a fullstack clone of Linktree built with Next.js, Tailwind CSS, 
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -56,7 +53,7 @@ To get a local copy up and running follow these simple steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/jeffjiang13/Linktree.git
+   git clone repo_name
    ```
 2. Install NPM packages
    ```sh
